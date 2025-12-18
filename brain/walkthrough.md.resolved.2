@@ -1,0 +1,30 @@
+# Political Simulator - Walkthrough
+
+## How to Run
+1. Open your terminal in the project directory:
+   ```bash
+   cd /Users/marktremmel/diplomacy
+   ```
+2. Run a simple Python server:
+   ```bash
+   python3 -m http.server 8000
+   ```
+3. Open your browser to: [http://localhost:8000](http://localhost:8000)
+
+## Features & Usage
+
+### 📊 Dashboard Navigation
+You can now switch between views using the left-hand menu:
+- **Overview**: Real-time economic metrics and projected revenue/expense.
+- **Policies & Budget**: *[NEW]* The main control center for your nation.
+
+### 📜 Policy Grid
+Go to the **"Policies & Budget"** tab to manage your nation's priorities.
+- **Sliders**: Adjust spending (0-100%) on **Healthcare, Education, Military, Infrastructure, Welfare, and Police**.
+- **Real-Time Cost**: As you drag the slider, the annual cost updates immediately.
+- **Budget Impact**: Changes here instantly affect your "Projected Expenses" in the Overview tab.
+
+### 🧠 Simulation Logic
+- **Faction System**: Voter Groups (Rural, Urban, etc.) react to your choices.
+- **Dilemma Engine**: Random events trigger based on your stats.
+- **Scenario Customization**: Play as Poland, Hungary, Czechia, Slovakia, or Romania with real 2024 data.

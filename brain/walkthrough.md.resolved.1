@@ -1,0 +1,37 @@
+# Political Simulator - Walkthrough
+
+## How to Run
+Since this project uses ES6 Modules ([import](file:///Users/marktremmel/diplomacy/js/core/State.js#82-99)/[export](file:///Users/marktremmel/diplomacy/js/core/State.js#75-81)), you cannot simply double-click [index.html](file:///Users/marktremmel/diplomacy/index.html). You must run a local server.
+
+1. Open your terminal in the project directory:
+   ```bash
+   cd /Users/marktremmel/diplomacy
+   ```
+2. Run a simple Python server:
+   ```bash
+   python3 -m http.server 8000
+   ```
+3. Open your browser to: [http://localhost:8000](http://localhost:8000)
+
+## Current Features (Phase 3 Backend Complete)
+
+### 1. Scenario Picker & Customization
+- **Select Nation**: Choose from Poland, Hungary, Czechia, Slovakia, Romania.
+- **Customize**: Rename your leader and party.
+- **Real Data**: Uses 2024 economic projections.
+
+### 2. The Simulation Engine
+The following systems are now active and running in real-time:
+
+*   **Faction System**: Calculates support based on overlapping "Voter Groups" (e.g., Rural Workers, Urban Elite). You can see the support bars on the right.
+*   **Economy System**: Calculates daily budget surplus/deficit based on Tax Rate vs. Spending.
+*   **Policy System**: Tracks spending on Health, Education, Military, etc. (Currently backend-only, visualized in next update).
+*   **Dilemma Engine**: Every 2 weeks (approx), a random event may trigger if conditions are met (e.g., "Healthcare Crisis").
+
+### 3. Dashboard UI
+- **Top Bar**: Ticker for Capital, Budget, Approval.
+- **Center**: Shows projected daily Income vs Expenses.
+- **Right**: Live Faction Support bars.
+
+## Next Steps (Visualizing Policies)
+- We will implement a **"Policy Grid"** dashboard (inspired by *Democracy 4*) to allow you to adjust spending sliders (Health, Military) and see their direct impact on the budget and factions.

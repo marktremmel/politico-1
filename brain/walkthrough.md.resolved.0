@@ -1,0 +1,35 @@
+# Political Simulator - Walkthrough
+
+## How to Run
+Since this project uses ES6 Modules ([import](file:///Users/marktremmel/diplomacy/js/core/State.js#82-99)/[export](file:///Users/marktremmel/diplomacy/js/core/State.js#75-81)), you cannot simply double-click [index.html](file:///Users/marktremmel/diplomacy/index.html). You must run a local server.
+
+1. Open your terminal in the project directory:
+   ```bash
+   cd /Users/marktremmel/diplomacy
+   ```
+2. Run a simple Python server:
+   ```bash
+   python3 -m http.server 8000
+   ```
+3. Open your browser to: [http://localhost:8000](http://localhost:8000)
+
+## Current Features (Phase 2 Complete)
+
+### 1. Scenario Picker
+- When you load the page, you are greeted with a "Select Your Nation" panel.
+- Choose from 5 real-world scenarios: **Poland, Hungary, Czechia, Slovakia, Romania**.
+- Stats (GDP, Debt, Pop) are based on real 2024 projections.
+
+### 2. Main Dashboard
+- **Top Bar**: Shows Country Name, Leader Name, and the current Flag.
+- **Ticker**: Tracks Time, Political Capital, Budget, and Approval.
+- **Glassmorphism UI**: Uses a premium dark aesthetic with blur effects.
+
+### 3. Core Logic
+- **Time**: Advances daily when unpaused.
+- **Political Capital**: Automatically trickles in (+0.5/turn) via the [PoliticsSystem](file:///Users/marktremmel/diplomacy/js/systems/PoliticsSystem.js#1-28).
+- **System Architecture**: The game is running on a modular [GameEngine](file:///Users/marktremmel/diplomacy/js/core/GameEngine.js#3-76) with a Pub/Sub [State](file:///Users/marktremmel/diplomacy/js/core/State.js#1-100) manager, ready for the complex features in Phase 3.
+
+## Next Steps (Phase 3)
+- We will implement the **Faction System** (overlapping groups).
+- We will build the **Dilemma Engine** to trigger events like "Teacher Strike" or "Healthcare Crisis".

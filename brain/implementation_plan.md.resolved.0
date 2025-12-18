@@ -1,0 +1,86 @@
+# Political Simulator Implementation Plan
+
+## Goal Description
+Create a deep, responsive country leader simulator that allows the player to manage a nation through Political Capital, Faction balancing, Economic management, and Geopolitical maneuvering. The game will focus on "dilemmas" rather than simple upgrades, emphasizing emergent storytelling and the "slippery slope" of political power.
+
+## User Review Required
+> [!IMPORTANT]
+> **Tech Stack Choice**: We are using **Vanilla HTML/CSS/JavaScript (ES6 Modules)** to ensure maximum compatibility with GitHub Pages and potential educational use, without complex build tools. If you prefer a framework like React or Vue, please let me know before we begin Phase 2.
+
+> [!NOTE]
+> **Complexity Warning**: The "Overlapping Membership" mechanic for factions adds significant simulation depth. We will model this by having population "Agents" or statistical buckets that hold multiple tags (e.g., "Agent #12: Capitalist, Religious").
+
+## Proposed Changes
+
+### Project Structure
+We will establish a clean, modular structure using ES6 modules.
+
+#### [NEW] [index.html](file:///Users/marktremmel/diplomacy/index.html)
+Main entry point. Will contain the core UI scaffolding (Header, Main Map/Dashboard, News Feed, Action Bar).
+
+#### [NEW] [css/style.css](file:///Users/marktremmel/diplomacy/css/style.css)
+Global styles. Will use CSS Variables for theming (Dark Mode/Paper theme) and Flexbox/Grid for layout.
+
+#### [NEW] [js/main.js](file:///Users/marktremmel/diplomacy/js/main.js)
+Bootstraps the `GameEngine`.
+
+### Core Architecture (`js/core/`)
+
+#### [NEW] [js/core/GameEngine.js](file:///Users/marktremmel/diplomacy/js/core/GameEngine.js)
+- Manages the game loop (turns or real-time days).
+- Handles state saving/loading.
+- Orchestrates systems (Economy, Politics, etc.).
+
+#### [NEW] [js/core/State.js](file:///Users/marktremmel/diplomacy/js/core/State.js)
+- Central store for all game data: `PoliticalCapital`, `Budget`, `PublicSupport`, `Ministers`, `FactionStandings`.
+- Follows a Pub/Sub pattern to notify UI of changes.
+
+### Systems Implementation (`js/systems/`)
+
+#### [NEW] [js/systems/PoliticsSystem.js](file:///Users/marktremmel/diplomacy/js/systems/PoliticsSystem.js)
+- **Political Capital (PC)**: Logic for earning (periodic, event rewards) and spending (actions).
+- **Cabinet**: Logic for appointing/firing ministers. Calculates `MinisterEfficiency` vs `MinisterLoyalty`.
+
+#### [NEW] [js/systems/FactionSystem.js](file:///Users/marktremmel/diplomacy/js/systems/FactionSystem.js)
+- Manages faction happiness and membership.
+- **Overlap Logic**: Handles how a single event hits multiple groups based on overlap weights.
+
+#### [NEW] [js/systems/EconomySystem.js](file:///Users/marktremmel/diplomacy/js/systems/EconomySystem.js)
+- **Flow Engine**: Calculates `NetIncome = Revenue (Taxes, Trade) - Expenses (Services, Military, Debt)`.
+- Updates `Debt` and triggers economic consequences (e.g., `SimulateRecession()`).
+
+#### [NEW] [js/systems/GeopoliticsSystem.js](file:///Users/marktremmel/diplomacy/js/systems/GeopoliticsSystem.js)
+- Tracks relations with Superpowers (e.g., "West" vs "East").
+- Manages Trade Deals availability based on relations.
+
+### The Dilemma Engine (`js/events/`)
+
+#### [NEW] [js/events/DilemmaManager.js](file:///Users/marktremmel/diplomacy/js/events/DilemmaManager.js)
+- Selects events based on triggers (e.g., `LowHealth` triggers `VirusOutbreak`).
+- Presents choices (A, B, C).
+- Applies effects (immediate stat changes + flagged future consequences).
+
+### UI/UX (`js/ui/`)
+
+#### [NEW] [js/ui/UIManager.js](file:///Users/marktremmel/diplomacy/js/ui/UIManager.js)
+- Main UI controller.
+- Dynamically updates the "Dashboard" to avoid spreadsheet fatigue (e.g., changing icons/colors based on state).
+
+#### [NEW] [js/ui/NewsFeed.js](file:///Users/marktremmel/diplomacy/js/ui/NewsFeed.js)
+- Generates headlines from event outcomes (e.g., `Teacher Strike` instead of just `-5 Education`).
+
+#### [NEW] [js/ui/TooltipManager.js](file:///Users/marktremmel/diplomacy/js/ui/TooltipManager.js)
+- Implements nested tooltips to explain "Why is my GDP low?".
+
+## Verification Plan
+
+### Automated Tests
+- Since we are using Vanilla JS, we will create a simple `TestRunner.js` to verify math logic:
+    - [ ] Verify Political Capital deduction works and prevents actions when negative.
+    - [ ] Verify Faction overlap updates multiple standings correctly.
+    - [ ] Verify Economy flows (Income - Expense = Net).
+
+### Manual Verification
+- **Gameplay Loop**: Play through 10 "turns" to ensure Political Capital scarcity feels right.
+- **Visuals**: Check that "Low Order" visually changes the UI (e.g., smoke/icons).
+- **Tooltips**: Hover over every main stat to ensure calculation breakdown is visible.

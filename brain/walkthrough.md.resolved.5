@@ -1,0 +1,30 @@
+# Political Simulator - Walkthrough
+
+## How to Run
+1. Open your terminal in the project directory:
+   ```bash
+   cd /Users/marktremmel/diplomacy
+   ```
+2. Run a simple Python server:
+   ```bash
+   python3 -m http.server 8000
+   ```
+3. Open your browser to: [http://localhost:8000](http://localhost:8000)
+
+## Features & Usage
+
+### 📊 Dashboard Navigation
+- **Rich Overview**: Now features granular tables:
+    - **Revenue**: Income Tax vs Corporate Tax vs VAT.
+    - **Expenses**: Specific Policy Spending vs Debt Interest.
+    - **Note**: This view updates daily. Force an Event to see immediate impact on stock numbers (e.g., -$2B), though daily flow adjusts more slowly.
+- **Force Event**: The "⚡ Force Event" button works reliably now. It will pause the game and present a choice.
+
+### 📜 Policy Grid
+Go to the **"Policies & Budget"** tab to manage your nation's priorities.
+- **Sliders**: Adjust spending (0-100%) on **Healthcare, Education, Military, etc.**
+- **Real-Time Cost**: As you drag the slider, the annual cost updates instantly.
+
+### 🌅 Visuals
+- **Dynamic Sky**: Smoother 2-minute day/night cycle.
+- **City Backdrop**: Your custom city silhouette is integrated safely behind the glass UI.

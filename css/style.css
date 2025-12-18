@@ -1,0 +1,553 @@
+:root {
+    /* Colors - Premium Pol-Sim Palette */
+    --bg-dark: #0f172a;
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
+    /* Lighter for readability on dynamic bg */
+
+    /* Effects */
+    --glass-bg: rgba(15, 23, 42, 0.6);
+    /* More transparent */
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-highlight: rgba(255, 255, 255, 0.1);
+
+    --accent-gold: #fbbf24;
+    --accent-blue: #38bdf8;
+    --accent-red: #f87171;
+    --accent-green: #4ade80;
+
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-main);
+    background-color: var(--bg-dark);
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+}
+
+/* --- Dynamic Background System --- */
+
+#background-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    animation: skyCycle 120s infinite linear;
+    /* 2 min day/night cycle */
+}
+
+@keyframes skyCycle {
+
+    /* Normalized to 3 stops (0%, 50%, 100%) for smooth interpolation */
+    /* Night */
+    0% {
+        background: linear-gradient(180deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+    }
+
+    /* Dawn */
+    20% {
+        background: linear-gradient(180deg, #2e1065 0%, #7c3aed 50%, #f59e0b 100%);
+    }
+
+    /* Day */
+    40% {
+        background: linear-gradient(180deg, #0ea5e9 0%, #38bdf8 50%, #7dd3fc 100%);
+    }
+
+    /* Day Hold */
+    60% {
+        background: linear-gradient(180deg, #0ea5e9 0%, #38bdf8 50%, #7dd3fc 100%);
+    }
+
+    /* Dusk */
+    80% {
+        background: linear-gradient(180deg, #4c1d95 0%, #c026d3 50%, #fbbf24 100%);
+    }
+
+    /* Night */
+    100% {
+        background: linear-gradient(180deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+    }
+}
+
+#cloud-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    z-index: -1;
+    background: url('https://raw.githubusercontent.com/templatemonster/parallax/master/assets/images/clouds.png');
+    /* Placeholder cloud texture or generate one? Let's assume subtle noise or gradient for now if image fails */
+    opacity: 0.3;
+    animation: moveClouds 60s linear infinite;
+    pointer-events: none;
+}
+
+/* Fallback cloud if image fails */
+#cloud-layer {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    background-size: 50% 50%;
+}
+
+@keyframes moveClouds {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+#city-silhouette {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    z-index: -1;
+    background-image: url('../assets/city_bg.jpg');
+    background-size: cover;
+    background-position: center bottom;
+    opacity: 0.6;
+    /* Blend with sky */
+    mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+    /* Fade top edge */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+    mix-blend-mode: overlay;
+    /* Allows sky colors to tint the city */
+}
+
+/* --- Layout & Glass --- */
+
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-top: 1px solid var(--glass-highlight);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+/* App Containers */
+#app {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    padding: 1rem;
+    gap: 1rem;
+    z-index: 1;
+    /* Above bg */
+}
+
+/* Nav & Buttons */
+.active-nav {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+}
+
+.btn-secondary {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    padding: 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+
+/* Sliders */
+.policy-slider {
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.2);
+    height: 6px;
+    border-radius: 4px;
+}
+
+.policy-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--accent-gold);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+}
+
+/* Header & Ticker */
+#top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+}
+
+.country-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#country-flag {
+    font-size: 2.2rem;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+
+.titles h1 {
+    font-size: 1.4rem;
+    color: var(--accent-gold);
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+}
+
+/* Main Layout */
+#main-interface {
+    display: grid;
+    grid-template-columns: 320px 1fr 320px;
+    gap: 1rem;
+    overflow: hidden;
+}
+
+#panel-left,
+#panel-right {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#view-dashboard h2 {
+    margin-bottom: 0.5rem;
+}
+
+#news-feed-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.news-item {
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+/* Flag selection cards */
+.btn-choice {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--accent-gold);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#dilemma-title {
+    color: var(--accent-gold);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#dilemma-description {
+    margin-bottom: 2rem;
+    line-height: 1.5;
+    color: var(--text-main);
+}
+
+#dilemma-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Tooltip */
+#tooltip {
+    position: fixed;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(4px);
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 10000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    max-width: 250px;
+    line-height: 1.4;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+#tooltip.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: block;
+    /* Keep it in DOM for layout but invisible */
+}
+
+#tooltip strong {
+    color: var(--accent-gold);
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+/* Modal Fixes - Ensure High Z-Index */
+#modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999 !important;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+#modal-container.hidden {
+    display: none !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ============================================ */
+/* PHASE 4: VISUAL POLISH                      */
+/* ============================================ */
+
+/* Header Stats Bar */
+#header-stats-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(to right, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    z-index: 1000;
+    padding: 0 2rem;
+    backdrop-filter: blur(8px);
+}
+
+#header-stats-bar .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+}
+
+#header-stats-bar .stat-label {
+    color: var(--text-muted);
+}
+
+#header-stats-bar .stat-value {
+    font-weight: 600;
+    color: var(--accent-gold);
+}
+
+#header-stats-bar .stat-value.positive {
+    color: var(--accent-green);
+}
+
+#header-stats-bar .stat-value.negative {
+    color: var(--accent-red);
+}
+
+/* Improved Modal Design */
+#modal-content {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
+    border: 2px solid var(--accent-gold);
+    box-shadow: 0 0 40px rgba(251, 191, 36, 0.2);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#dilemma-title {
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.btn-choice {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-choice:hover {
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+
+.btn-choice:active {
+    transform: scale(0.98);
+}
+
+/* Stat Change Animations */
+@keyframes statPulseGreen {
+    0% {
+        background-color: transparent;
+    }
+
+    50% {
+        background-color: rgba(74, 222, 128, 0.2);
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+@keyframes statPulseRed {
+    0% {
+        background-color: transparent;
+    }
+
+    50% {
+        background-color: rgba(248, 113, 113, 0.2);
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+.stat-flash-green {
+    animation: statPulseGreen 0.6s ease-in-out;
+}
+
+.stat-flash-red {
+    animation: statPulseRed 0.6s ease-in-out;
+}
+
+/* Navigation Active State Enhancement */
+.active-nav {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold)) !important;
+    color: var(--bg-dark) !important;
+    font-weight: 600;
+}
+
+/* Difficulty Badge */
+.difficulty-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.difficulty-easy {
+    background: var(--accent-green);
+    color: #000;
+}
+
+.difficulty-normal {
+    background: var(--accent-blue);
+    color: #000;
+}
+
+.difficulty-hard {
+    background: var(--accent-gold);
+    color: #000;
+}
+
+.difficulty-nightmare {
+    background: var(--accent-red);
+    color: #fff;
+}
+
+/* Election Timer Urgency */
+.election-urgent {
+    animation: pulseUrgent 1s infinite;
+}
+
+@keyframes pulseUrgent {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
